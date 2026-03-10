@@ -21,7 +21,8 @@ COPY pyproject.toml uv.lock ./
 # Install dependencies into a virtual environment
 RUN uv sync --frozen --no-dev --no-install-project
 
-# Copy source code
+# Copy source code and README (hatchling requires readme declared in pyproject.toml)
+COPY README.md ./
 COPY src/ src/
 
 # Install the project itself
@@ -34,7 +35,7 @@ FROM python:3.12-slim AS runtime
 LABEL org.opencontainers.image.title="AgentWorks" \
       org.opencontainers.image.description="Self-hosted AI agent runtime with state machine orchestration" \
       org.opencontainers.image.version="1.0.0" \
-      org.opencontainers.image.source="https://github.com/your-org/agentworks" \
+      org.opencontainers.image.source="https://github.com/weelzo/AgentWorks" \
       org.opencontainers.image.licenses="MIT"
 
 WORKDIR /app
