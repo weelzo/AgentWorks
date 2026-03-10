@@ -46,6 +46,7 @@ config/local-dev.yaml
 # Documentation (not needed in image)
 docs
 *.md
+!README.md
 !dashboard/README.md
 
 # Internal architecture docs
