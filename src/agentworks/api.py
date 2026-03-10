@@ -955,7 +955,7 @@ async def list_runs(
                 outcome = None
                 if ctx.current_state in (AgentState.COMPLETED, AgentState.FAILED):
                     outcome = ctx.current_state.value
-                tc_dicts = [tc.model_dump() if hasattr(tc, "model_dump") else tc for tc in ctx.tool_calls]
+                tc_dicts = [tc.model_dump() for tc in ctx.tool_calls]
                 items.append(
                     RunListItem(
                         run_id=ctx.run_id,
@@ -1016,6 +1016,7 @@ async def list_runs(
                 if row.get("tool_calls_json"):
                     try:
                         import json as _json
+
                         tc_list = _json.loads(row["tool_calls_json"])
                         if isinstance(tc_list, list):
                             cold_error_summary = _compute_error_summary(tc_list)
