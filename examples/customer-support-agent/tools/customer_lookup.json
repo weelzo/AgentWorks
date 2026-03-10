@@ -1,0 +1,37 @@
+{
+  "tool_id": "customer_lookup",
+  "name": "Customer Lookup",
+  "description": "Look up a customer by ID and return their account details including name, email, plan, and account status.",
+  "version": "1.0.0",
+  "endpoint_url": "http://localhost:8001/api/customers/lookup",
+  "http_method": "POST",
+  "ssrf_check_enabled": false,
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "customer_id": {
+        "type": "string",
+        "description": "The customer ID to look up"
+      }
+    },
+    "required": ["customer_id"]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "customer_id": { "type": "string" },
+      "name": { "type": "string" },
+      "email": { "type": "string" },
+      "plan": { "type": "string" },
+      "status": { "type": "string" },
+      "created_at": { "type": "string" }
+    }
+  },
+  "timeout_seconds": 10,
+  "owner_team": "support",
+  "tags": ["crm", "customer"],
+  "rate_limit": {
+    "requests_per_minute": 60,
+    "burst_size": 10
+  }
+}

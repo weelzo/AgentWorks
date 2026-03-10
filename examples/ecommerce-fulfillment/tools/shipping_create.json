@@ -1,0 +1,44 @@
+{
+  "tool_id": "shipping_create",
+  "name": "Create Shipping Label",
+  "description": "Create a shipping label for an order. Requires the order ID, recipient name, and delivery address. Returns a tracking number and carrier information.",
+  "version": "1.0.0",
+  "endpoint_url": "http://localhost:8002/api/shipping/create",
+  "http_method": "POST",
+  "ssrf_check_enabled": false,
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "order_id": {
+        "type": "string",
+        "description": "The order ID to create a shipping label for"
+      },
+      "recipient_name": {
+        "type": "string",
+        "description": "Full name of the recipient"
+      },
+      "address": {
+        "type": "string",
+        "description": "Delivery address"
+      }
+    },
+    "required": ["order_id", "recipient_name", "address"]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "shipment_id": { "type": "string" },
+      "tracking_number": { "type": "string" },
+      "carrier": { "type": "string" },
+      "estimated_delivery": { "type": "string" },
+      "status": { "type": "string" }
+    }
+  },
+  "timeout_seconds": 10,
+  "owner_team": "operations",
+  "tags": ["shipping", "fulfillment"],
+  "rate_limit": {
+    "requests_per_minute": 20,
+    "burst_size": 5
+  }
+}

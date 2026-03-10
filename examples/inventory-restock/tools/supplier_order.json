@@ -1,0 +1,51 @@
+{
+  "tool_id": "supplier_order",
+  "name": "Supplier Order",
+  "description": "Place a purchase order with the supplier to restock inventory. Requires the SKU, quantity to order, and priority level.",
+  "version": "1.0.0",
+  "endpoint_url": "http://localhost:8003/api/supplier/order",
+  "http_method": "POST",
+  "ssrf_check_enabled": false,
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "sku": {
+        "type": "string",
+        "description": "The product SKU to reorder"
+      },
+      "quantity": {
+        "type": "integer",
+        "description": "Number of units to order"
+      },
+      "priority": {
+        "type": "string",
+        "enum": ["standard", "expedited", "emergency"],
+        "description": "Order priority level",
+        "default": "standard"
+      }
+    },
+    "required": ["sku", "quantity"]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "order_id": { "type": "string" },
+      "sku": { "type": "string" },
+      "quantity": { "type": "integer" },
+      "status": { "type": "string" },
+      "estimated_delivery": { "type": "string" }
+    }
+  },
+  "timeout_seconds": 15,
+  "retry_policy": {
+    "max_retries": 0,
+    "retryable_errors": [],
+    "non_retryable_errors": ["auth_failure", "client_error"]
+  },
+  "owner_team": "operations",
+  "tags": ["supplier", "procurement"],
+  "rate_limit": {
+    "requests_per_minute": 10,
+    "burst_size": 3
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "tool_id": "inventory_levels",
+  "name": "Inventory Levels",
+  "description": "Check current inventory levels for a product by SKU. Returns quantity on hand, reorder threshold, unit cost, and stock status.",
+  "version": "1.0.0",
+  "endpoint_url": "http://localhost:8003/api/inventory/levels",
+  "http_method": "POST",
+  "ssrf_check_enabled": false,
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "sku": {
+        "type": "string",
+        "description": "The product SKU to check levels for"
+      }
+    },
+    "required": ["sku"]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "sku": { "type": "string" },
+      "name": { "type": "string" },
+      "quantity": { "type": "integer" },
+      "reorder_threshold": { "type": "integer" },
+      "status": { "type": "string" }
+    }
+  },
+  "timeout_seconds": 10,
+  "owner_team": "operations",
+  "tags": ["inventory", "warehouse"],
+  "rate_limit": {
+    "requests_per_minute": 60,
+    "burst_size": 10
+  }
+}

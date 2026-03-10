@@ -1,0 +1,51 @@
+{
+  "tool_id": "billing_history",
+  "name": "Billing History",
+  "description": "Retrieve billing and payment history for a customer. Returns a list of charges with dates, amounts, descriptions, and payment status.",
+  "version": "1.0.0",
+  "endpoint_url": "http://localhost:8001/api/billing/history",
+  "http_method": "POST",
+  "ssrf_check_enabled": false,
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "customer_id": {
+        "type": "string",
+        "description": "The customer ID to retrieve billing for"
+      },
+      "months": {
+        "type": "integer",
+        "description": "Number of months of history to retrieve",
+        "minimum": 1,
+        "maximum": 24,
+        "default": 3
+      }
+    },
+    "required": ["customer_id"]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "customer_id": { "type": "string" },
+      "charges": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "date": { "type": "string" },
+            "amount": { "type": "number" },
+            "description": { "type": "string" },
+            "status": { "type": "string" }
+          }
+        }
+      }
+    }
+  },
+  "timeout_seconds": 15,
+  "owner_team": "support",
+  "tags": ["billing", "payments"],
+  "rate_limit": {
+    "requests_per_minute": 30,
+    "burst_size": 5
+  }
+}

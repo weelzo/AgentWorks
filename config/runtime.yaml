@@ -1,0 +1,88 @@
+# AgentWorks — Production Configuration
+# Copy this file and customize for your environment.
+
+environment: production
+
+# Authentication — enable and set API keys for production
+auth:
+  enabled: true
+  api_key_header: X-API-Key
+  api_keys:
+    - "REPLACE_WITH_ACTUAL_API_KEY"
+
+# Rate limiting — protect against abuse
+rate_limit:
+  enabled: true
+  requests_per_minute: 120
+  per_key: true
+  burst_size: 20
+
+# Security — SSRF protection and body size limits
+security:
+  enforce_ssrf_protection: true
+  max_request_body_bytes: 1048576  # 1MB
+
+# CORS — restrict to your frontend origins
+cors:
+  allow_origins:
+    - "https://your-app.example.com"
+  allow_methods:
+    - "GET"
+    - "POST"
+    - "PUT"
+    - "DELETE"
+  allow_headers:
+    - "Content-Type"
+    - "X-API-Key"
+    - "X-Request-ID"
+
+# Redis — hot checkpoint store
+redis:
+  host: redis
+  port: 6379
+  password_ref: "env:REDIS_PASSWORD"
+  ssl: false
+  max_connections: 50
+
+# PostgreSQL — cold store for completed runs
+postgres:
+  host: postgres
+  port: 5432
+  database: agentworks
+  user: agentworks
+  password_ref: "env:POSTGRES_PASSWORD"
+
+# LLM Providers — configure at least one for the engine to work
+providers:
+  - name: openai
+    provider_type: openai
+    api_key_ref: "env:OPENAI_API_KEY"
+    model: gpt-4
+    max_tokens: 4096
+    temperature: 0.1
+  # - name: anthropic
+  #   provider_type: anthropic
+  #   api_key_ref: "env:ANTHROPIC_API_KEY"
+  #   model: claude-sonnet-4-20250514
+
+# Execution defaults
+execution:
+  max_iterations: 25
+  max_budget_usd: 1.0
+  default_timeout_seconds: 120.0
+
+# Observability
+observability:
+  tracing_enabled: true
+  metrics_enabled: true
+  logging_format: json
+  otlp_endpoint: "http://otel-collector:4317"
+  service_name: agentworks
+  environment: production
+  sample_rate: 0.1  # 10% sampling in production
+
+# Server
+host: "0.0.0.0"
+port: 8000
+workers: 4
+log_level: info

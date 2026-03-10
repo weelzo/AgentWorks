@@ -1,0 +1,56 @@
+# Git
+.git
+.gitignore
+
+# Docker files (no recursion)
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# CI/CD
+.github
+
+# Python caches and artifacts
+__pycache__
+*.py[cod]
+*.egg-info
+.venv
+.mypy_cache
+.pytest_cache
+.ruff_cache
+.coverage
+htmlcov
+
+# Node (rebuilt in container)
+dashboard/node_modules
+
+# Tests (not needed in production)
+tests
+
+# IDE / editor
+.idea
+.vscode
+*.swp
+*.swo
+.history
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment and secrets
+.env
+.env.*
+config/local-dev.yaml
+
+# Documentation (not needed in image)
+docs
+*.md
+!dashboard/README.md
+
+# Internal architecture docs
+01-agent-runtime-architecture.md
+DESIGN_PLAN.md
+
+# Examples (optional — remove this line if you want examples in the image)
+examples

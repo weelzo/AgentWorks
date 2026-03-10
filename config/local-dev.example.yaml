@@ -1,0 +1,67 @@
+# AgentWorks — Local Development Configuration
+# Copy this file to local-dev.yaml and fill in your API key:
+#   cp config/local-dev.example.yaml config/local-dev.yaml
+#
+# Then start the runtime:
+#   AGENTWORKS_CONFIG_PATH=config/local-dev.yaml uv run uvicorn agentworks.api:app --host 0.0.0.0 --port 8000
+
+environment: development
+log_level: debug
+
+auth:
+  enabled: false
+
+rate_limit:
+  enabled: false
+
+cors:
+  allow_origins:
+    - "*"
+  allow_methods:
+    - "GET"
+    - "POST"
+    - "PUT"
+    - "DELETE"
+    - "OPTIONS"
+  allow_headers:
+    - "*"
+
+redis:
+  host: localhost
+  port: 6379
+  password_ref: ""
+
+postgres:
+  host: localhost
+  port: 5432
+  database: agentworks
+  user: agentworks
+  password_ref: "env:POSTGRES_PASSWORD"
+
+providers:
+  - provider_id: openai-primary
+    provider_type: openai
+    display_name: OpenAI GPT-4o
+    base_url: "https://api.openai.com/v1"
+    api_key_ref: "env:OPENAI_API_KEY"
+    models:
+      - model_id: gpt-4o
+        display_name: GPT-4o
+        capabilities: ["chat", "function_calling"]
+        context_window: 128000
+        max_output_tokens: 16384
+        cost_per_1k_input: 0.0025
+        cost_per_1k_output: 0.01
+        default_temperature: 0.1
+
+execution:
+  max_iterations: 25
+  max_budget_usd: 1.0
+  default_timeout_seconds: 120.0
+
+observability:
+  tracing_enabled: false
+  metrics_enabled: false
+  logging_format: text
+  service_name: agentworks
+  environment: development

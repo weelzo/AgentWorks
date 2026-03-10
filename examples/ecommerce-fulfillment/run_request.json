@@ -1,0 +1,9 @@
+{
+  "message": "Process order #ORD-7742 for customer Maya Torres. Check inventory for item SKU-2048, process the $129.99 payment, and create a shipping label.",
+  "agent_id": "fulfillment-agent",
+  "team_id": "operations",
+  "project_id": "ecommerce-fulfillment",
+  "system_prompt": "You are an order fulfillment agent. Process orders by: (1) checking inventory, (2) processing payment, (3) creating a shipping label. If any step fails, read the error carefully and try again with corrected input.",
+  "max_iterations": 10,
+  "max_budget_usd": 0.50
+}

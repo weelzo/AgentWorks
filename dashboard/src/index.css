@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+/* Catppuccin Mocha (dark) / Latte (light) design tokens */
+@theme {
+  --color-ctp-base: #1e1e2e;
+  --color-ctp-mantle: #181825;
+  --color-ctp-crust: #11111b;
+  --color-ctp-surface0: #313244;
+  --color-ctp-surface1: #45475a;
+  --color-ctp-surface2: #585b70;
+  --color-ctp-overlay0: #6c7086;
+  --color-ctp-overlay1: #7f849c;
+  --color-ctp-text: #cdd6f4;
+  --color-ctp-subtext0: #a6adc8;
+  --color-ctp-subtext1: #bac2de;
+  --color-ctp-blue: #89b4fa;
+  --color-ctp-green: #a6e3a1;
+  --color-ctp-red: #f38ba8;
+  --color-ctp-peach: #fab387;
+  --color-ctp-yellow: #f9e2af;
+  --color-ctp-teal: #94e2d5;
+  --color-ctp-mauve: #cba6f7;
+  --color-ctp-sky: #89dceb;
+  --color-ctp-lavender: #b4befe;
+  --color-ctp-flamingo: #f2cdcd;
+  --color-ctp-rosewater: #f5e0dc;
+}
+
+/* Light mode overrides */
+.light {
+  --color-ctp-base: #eff1f5;
+  --color-ctp-mantle: #e6e9ef;
+  --color-ctp-crust: #dce0e8;
+  --color-ctp-surface0: #ccd0da;
+  --color-ctp-surface1: #bcc0cc;
+  --color-ctp-surface2: #acb0be;
+  --color-ctp-overlay0: #9ca0b0;
+  --color-ctp-overlay1: #8c8fa1;
+  --color-ctp-text: #4c4f69;
+  --color-ctp-subtext0: #6c6f85;
+  --color-ctp-subtext1: #5c5f77;
+  --color-ctp-blue: #1e66f5;
+  --color-ctp-green: #40a02b;
+  --color-ctp-red: #d20f39;
+  --color-ctp-peach: #fe640b;
+  --color-ctp-yellow: #df8e1d;
+  --color-ctp-teal: #179299;
+  --color-ctp-mauve: #8839ef;
+  --color-ctp-sky: #04a5e5;
+  --color-ctp-lavender: #7287fd;
+  --color-ctp-flamingo: #dd7878;
+  --color-ctp-rosewater: #dc8a78;
+}
+
+body {
+  font-family: 'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.font-mono, code, pre, .mono-font {
+  font-family: 'Fira Code', 'JetBrains Mono', monospace;
+}
+
+/* Material Symbols config */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* State glow effect for active state nodes */
+.state-glow {
+  filter: drop-shadow(0 0 8px var(--glow-color, #f9e2af));
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-ctp-crust);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-ctp-surface1);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ctp-surface2);
+}

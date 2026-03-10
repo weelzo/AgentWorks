@@ -1,0 +1,41 @@
+{
+  "tool_id": "restock_notify",
+  "name": "Restock Notification",
+  "description": "Notify the warehouse team about an incoming restock shipment. Send after a supplier order is placed to prepare receiving.",
+  "version": "1.0.0",
+  "endpoint_url": "http://localhost:8003/api/warehouse/notify",
+  "http_method": "POST",
+  "ssrf_check_enabled": false,
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "sku": {
+        "type": "string",
+        "description": "The product SKU being restocked"
+      },
+      "order_id": {
+        "type": "string",
+        "description": "The supplier order ID"
+      },
+      "estimated_arrival": {
+        "type": "string",
+        "description": "Estimated arrival date (ISO format)"
+      }
+    },
+    "required": ["sku", "order_id", "estimated_arrival"]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "notification_id": { "type": "string" },
+      "message": { "type": "string" }
+    }
+  },
+  "timeout_seconds": 10,
+  "owner_team": "operations",
+  "tags": ["warehouse", "notifications"],
+  "rate_limit": {
+    "requests_per_minute": 30,
+    "burst_size": 5
+  }
+}

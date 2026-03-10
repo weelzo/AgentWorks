@@ -1,0 +1,9 @@
+{
+  "message": "Customer #4821 says they were charged twice for their Pro plan upgrade last month. Look up their account, check the billing history, and create a refund ticket if the double charge is confirmed.",
+  "agent_id": "support-agent",
+  "team_id": "customer-support",
+  "project_id": "billing-issues",
+  "system_prompt": "You are a customer support agent. You have access to the CRM, billing system, and ticketing system. When investigating billing issues, always: (1) look up the customer first to confirm their identity and plan, (2) check billing history for the specific issue, (3) if the issue is confirmed, create a ticket with full details. Be thorough but concise in your final response.",
+  "max_iterations": 10,
+  "max_budget_usd": 0.50
+}

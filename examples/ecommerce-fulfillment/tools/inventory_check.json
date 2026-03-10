@@ -1,0 +1,37 @@
+{
+  "tool_id": "inventory_check",
+  "name": "Inventory Check",
+  "description": "Check inventory availability for a product by SKU. Returns stock status, quantity available, item weight, and warehouse location.",
+  "version": "1.0.0",
+  "endpoint_url": "http://localhost:8002/api/inventory/check",
+  "http_method": "POST",
+  "ssrf_check_enabled": false,
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "sku": {
+        "type": "string",
+        "description": "The product SKU to check inventory for"
+      }
+    },
+    "required": ["sku"]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "sku": { "type": "string" },
+      "name": { "type": "string" },
+      "in_stock": { "type": "boolean" },
+      "quantity": { "type": "integer" },
+      "weight_kg": { "type": "number" },
+      "warehouse": { "type": "string" }
+    }
+  },
+  "timeout_seconds": 10,
+  "owner_team": "operations",
+  "tags": ["inventory", "fulfillment"],
+  "rate_limit": {
+    "requests_per_minute": 60,
+    "burst_size": 10
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "tool_id": "payment_process",
+  "name": "Payment Processing",
+  "description": "Process a payment for an order. Charges the customer and returns a payment confirmation with payment ID and status.",
+  "version": "1.0.0",
+  "endpoint_url": "http://localhost:8002/api/payments/process",
+  "http_method": "POST",
+  "ssrf_check_enabled": false,
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "order_id": {
+        "type": "string",
+        "description": "The order ID to process payment for"
+      },
+      "amount": {
+        "type": "number",
+        "description": "Payment amount in USD"
+      },
+      "currency": {
+        "type": "string",
+        "description": "Currency code (default: USD)",
+        "default": "USD"
+      }
+    },
+    "required": ["order_id", "amount"]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "payment_id": { "type": "string" },
+      "order_id": { "type": "string" },
+      "amount": { "type": "number" },
+      "status": { "type": "string" },
+      "processed_at": { "type": "string" }
+    }
+  },
+  "timeout_seconds": 15,
+  "retry_policy": {
+    "max_retries": 3,
+    "backoff_strategy": "exponential",
+    "base_delay_seconds": 1.0,
+    "retryable_errors": ["timeout", "rate_limit", "server_error"],
+    "non_retryable_errors": ["auth_failure", "invalid_input"]
+  },
+  "owner_team": "operations",
+  "tags": ["payments", "fulfillment"],
+  "rate_limit": {
+    "requests_per_minute": 30,
+    "burst_size": 5
+  }
+}

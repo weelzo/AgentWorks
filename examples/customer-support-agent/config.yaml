@@ -1,0 +1,67 @@
+# AgentWorks — Customer Support Agent Configuration
+#
+# This config runs the runtime with:
+#   - Auth enabled (API key required)
+#   - Rate limiting on (120 req/min)
+#   - OpenTelemetry traces sent to Jaeger
+#   - Budget guard at $1.00 per run
+
+environment: production
+
+auth:
+  enabled: true
+  api_keys:
+    - "env:AGENTWORKS_API_KEY"
+
+rate_limit:
+  enabled: true
+  requests_per_minute: 120
+  per_key: true
+  burst_size: 20
+
+security:
+  enforce_ssrf_protection: true
+  max_request_body_bytes: 1048576
+
+cors:
+  allow_origins:
+    - "https://support-dashboard.example.com"
+  allow_methods:
+    - "GET"
+    - "POST"
+  allow_headers:
+    - "Content-Type"
+    - "X-API-Key"
+
+redis:
+  host: redis
+  port: 6379
+  password_ref: "env:REDIS_PASSWORD"
+
+postgres:
+  host: postgres
+  port: 5432
+  database: agentworks
+  user: agentworks
+  password_ref: "env:POSTGRES_PASSWORD"
+
+providers:
+  - name: openai
+    provider_type: openai
+    api_key_ref: "env:OPENAI_API_KEY"
+    model: gpt-4o
+    max_tokens: 4096
+    temperature: 0.1
+
+execution:
+  max_iterations: 25
+  max_budget_usd: 1.0
+  default_timeout_seconds: 120.0
+
+observability:
+  tracing_enabled: true
+  metrics_enabled: true
+  logging_format: json
+  otlp_endpoint: "http://jaeger:4317"
+  service_name: agentworks
+  sample_rate: 1.0

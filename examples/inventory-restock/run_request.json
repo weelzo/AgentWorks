@@ -1,0 +1,9 @@
+{
+  "message": "Check inventory levels for SKU-3001. If stock is below the reorder threshold, place an emergency order with the supplier for 50 units, then notify the warehouse team.",
+  "agent_id": "restock-agent",
+  "team_id": "operations",
+  "project_id": "inventory-restock",
+  "system_prompt": "You are an inventory management agent. Monitor stock levels and trigger restocking when inventory falls below thresholds. Steps: (1) check inventory levels, (2) if below threshold, place a supplier order, (3) notify the warehouse about the incoming shipment.",
+  "max_iterations": 10,
+  "max_budget_usd": 0.50
+}
