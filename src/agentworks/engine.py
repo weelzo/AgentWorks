@@ -207,8 +207,8 @@ class ExecutionEngine:
             await self._sm.transition(ctx, AgentState.FAILED, "error")
             return
 
-        # Get available tool specs
-        tool_specs = self._tools.get_llm_tool_specs()
+        # Get available tool specs (scoped to run's tool_ids if specified)
+        tool_specs = self._tools.get_llm_tool_specs(tool_ids=ctx.tool_ids)
 
         try:
             # Transition to AWAITING_LLM

@@ -797,3 +797,79 @@ class TestGracefulShutdown:
         )
         assert resp.status_code == 503
         assert "shutting down" in resp.json()["error"].lower()
+
+
+# --------------------------------------------------------------------------
+# Tool scoping (tool_ids parameter)
+# --------------------------------------------------------------------------
+
+
+class TestToolIds:
+    """Tests for the tool_ids parameter on run requests."""
+
+    def test_run_request_accepts_tool_ids(self, client: TestClient):
+        """RunRequest accepts an optional tool_ids list."""
+        from agentworks.api import RunRequest
+
+        req = RunRequest(
+            message="test task",
+            agent_id="test-agent",
+            tool_ids=["web_search", "read_file"],
+        )
+        assert req.tool_ids == ["web_search", "read_file"]
+
+    def test_run_request_tool_ids_default_none(self, client: TestClient):
+        """tool_ids defaults to None (all tools available)."""
+        from agentworks.api import RunRequest
+
+        req = RunRequest(message="test task", agent_id="test-agent")
+        assert req.tool_ids is None
+
+    def test_run_request_tool_ids_empty_list(self, client: TestClient):
+        """An empty tool_ids list is valid (agent has no tools)."""
+        from agentworks.api import RunRequest
+
+        req = RunRequest(
+            message="test task",
+            agent_id="test-agent",
+            tool_ids=[],
+        )
+        assert req.tool_ids == []
+
+    def test_tool_ids_passed_to_context(self):
+        """tool_ids from RunRequest is stored in ExecutionContext."""
+        from agentworks.state_machine import ExecutionContext
+
+        ctx = ExecutionContext(
+            agent_id="test",
+            tool_ids=["search", "write"],
+        )
+        assert ctx.tool_ids == ["search", "write"]
+
+    def test_tool_ids_default_none_in_context(self):
+        """ExecutionContext.tool_ids defaults to None."""
+        from agentworks.state_machine import ExecutionContext
+
+        ctx = ExecutionContext(agent_id="test")
+        assert ctx.tool_ids is None
+
+    def test_tool_ids_survives_serialization(self):
+        """tool_ids is preserved through JSON serialization (checkpointing)."""
+        from agentworks.state_machine import ExecutionContext
+
+        ctx = ExecutionContext(
+            agent_id="test",
+            tool_ids=["search", "billing"],
+        )
+        data = ctx.model_dump(mode="json")
+        restored = ExecutionContext.model_validate(data)
+        assert restored.tool_ids == ["search", "billing"]
+
+    def test_tool_ids_none_survives_serialization(self):
+        """tool_ids=None is preserved through serialization."""
+        from agentworks.state_machine import ExecutionContext
+
+        ctx = ExecutionContext(agent_id="test")
+        data = ctx.model_dump(mode="json")
+        restored = ExecutionContext.model_validate(data)
+        assert restored.tool_ids is None

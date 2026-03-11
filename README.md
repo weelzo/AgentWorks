@@ -272,18 +272,70 @@ docker run -d \
 
 ## Start a Run
 
+### 1. Register a tool
+
+Tools are HTTP endpoints you already own. Register them once and every agent can use them.
+
 ```bash
-# Register a tool
 curl -X POST http://localhost:8000/api/v1/tools \
   -H "Content-Type: application/json" \
-  -d '{"tool_id":"my_tool","name":"My Tool","description":"Does something useful","version":"1.0.0","endpoint_url":"https://my-service/api","input_schema":{"type":"object","properties":{"query":{"type":"string"}}},"owner_team":"my-team"}'
+  -d '{
+    "tool_id": "web_search",
+    "name": "Web Search",
+    "description": "Search the web for information",
+    "version": "1.0.0",
+    "endpoint_url": "https://your-search-service.internal/api/search",
+    "input_schema": {
+      "type": "object",
+      "properties": { "query": { "type": "string" } },
+      "required": ["query"]
+    },
+    "owner_team": "engineering"
+  }'
+```
 
-# Start a run
+All registered tools are automatically available to every run. The LLM decides which tools to call based on the task.
+
+### 2. Start a run
+
+Save the request as a JSON file to avoid shell escaping issues:
+
+```json
+{
+  "message": "Research the top 3 competitors to Notion and summarize their pricing.",
+  "agent_id": "research-agent",
+  "team_id": "product",
+  "project_id": "competitor-analysis",
+  "system_prompt": "You are a market research analyst. Use the available tools to gather data, then provide a concise summary with key findings.",
+  "max_iterations": 10,
+  "max_budget_usd": 0.50,
+  "tool_ids": ["web_search"],
+  "metadata": { "requested_by": "pm-team", "priority": "high" }
+}
+```
+
+| Parameter | Required | Description |
+|-----------|----------|-------------|
+| `message` | yes | The task for the agent |
+| `agent_id` | yes | Agent identifier (for attribution and filtering) |
+| `team_id` | no | Team identifier for cost attribution |
+| `project_id` | no | Project identifier for cost attribution |
+| `system_prompt` | no | Agent persona and instructions |
+| `max_iterations` | no | Override default iteration limit (1–100) |
+| `max_budget_usd` | no | Override default budget ($0.01–$100) |
+| `tool_ids` | no | Restrict to specific tools (default: all registered tools) |
+| `metadata` | no | Opaque key-value data stored with the run |
+
+```bash
 curl -X POST http://localhost:8000/api/v1/runs \
   -H "Content-Type: application/json" \
-  -d '{"message":"Analyze the latest data","agent_id":"analyst","team_id":"data"}'
+  -d @run_request.json
+```
 
-# Retrieve a run
+### 3. Retrieve and list runs
+
+```bash
+# Get a specific run by ID
 curl http://localhost:8000/api/v1/runs/{run_id}
 
 # List recent runs

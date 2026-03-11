@@ -203,6 +203,9 @@ class ExecutionContext(BaseModel):
     updated_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
     completed_at: datetime | None = None
 
+    # Tool scoping (None = all registered tools available)
+    tool_ids: list[str] | None = None
+
     # Metadata (team-supplied, opaque to runtime)
     metadata: dict[str, Any] = Field(default_factory=dict)
 

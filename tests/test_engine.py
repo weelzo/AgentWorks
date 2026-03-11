@@ -683,3 +683,47 @@ class TestEdgeCases:
 
         assert result is ctx  # same object
         assert result.run_id == "run-test-001"
+
+
+# --------------------------------------------------------------------------
+# Tool scoping (tool_ids)
+# --------------------------------------------------------------------------
+
+
+class TestToolScoping:
+    """Tests that tool_ids on ExecutionContext filters tools passed to LLM."""
+
+    async def test_tool_ids_passed_to_get_llm_tool_specs(self):
+        """When ctx.tool_ids is set, engine passes it to get_llm_tool_specs."""
+        engine, _, mock_tools, _ = make_engine(
+            llm_responses=[make_final_answer("Done.")]
+        )
+        ctx = make_context(tool_ids=["search_only"])
+
+        await engine.run(ctx)
+
+        mock_tools.get_llm_tool_specs.assert_called_with(
+            tool_ids=["search_only"]
+        )
+
+    async def test_tool_ids_none_passes_none(self):
+        """When ctx.tool_ids is None, engine passes None (all tools)."""
+        engine, _, mock_tools, _ = make_engine(
+            llm_responses=[make_final_answer("Done.")]
+        )
+        ctx = make_context(tool_ids=None)
+
+        await engine.run(ctx)
+
+        mock_tools.get_llm_tool_specs.assert_called_with(tool_ids=None)
+
+    async def test_empty_tool_ids_passes_empty_list(self):
+        """When ctx.tool_ids is [], engine passes [] (no tools)."""
+        engine, _, mock_tools, _ = make_engine(
+            llm_responses=[make_final_answer("No tools available.")]
+        )
+        ctx = make_context(tool_ids=[])
+
+        await engine.run(ctx)
+
+        mock_tools.get_llm_tool_specs.assert_called_with(tool_ids=[])

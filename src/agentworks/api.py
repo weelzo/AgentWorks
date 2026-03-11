@@ -105,6 +105,10 @@ class RunRequest(BaseModel):
         max_length=5000,
         description="Optional system prompt override.",
     )
+    tool_ids: list[str] | None = Field(
+        default=None,
+        description="Restrict this run to specific tools. If omitted, all tools are available.",
+    )
     metadata: dict[str, Any] = Field(
         default_factory=dict,
         description="Opaque metadata passed through to the execution context.",
@@ -736,6 +740,7 @@ async def start_run(
         project_id=body.project_id,
         max_iterations=body.max_iterations or config.execution.max_iterations,
         max_budget_usd=body.max_budget_usd or config.execution.max_budget_usd,
+        tool_ids=body.tool_ids,
         metadata=body.metadata,
     )
 
